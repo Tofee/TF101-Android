@@ -30,15 +30,15 @@
 #error Do not include this file directly.  Include mpu.h instead.
 #endif
 
-#ifndef __MPU6050B1_H_
-#define __MPU6050B1_H_
+#ifndef __MPU6050A2_H_
+#define __MPU6050A2_H_
 
 #error Invalid or undefined CONFIG_MPU_SENSORS_MPUxxxx
 
-#define MPU_NAME "mpu6050B1"
-#define DEFAULT_MPU_SLAVEADDR		0x68
+#define MPU_NAME "mpu6000a2"
+#define DEFAULT_MPU_SLAVEADDR		(0x68)
 
-/*==== MPU6050B1 REGISTER SET ====*/
+/*==== MPU6050A2 REGISTER SET ====*/
 enum {
 	MPUREG_XG_OFFS_TC = 0,			/* 0x00,   0 */
 	MPUREG_YG_OFFS_TC,			/* 0x01,   1 */
@@ -47,12 +47,12 @@ enum {
 	MPUREG_Y_FINE_GAIN,			/* 0x04,   4 */
 	MPUREG_Z_FINE_GAIN,			/* 0x05,   5 */
 	MPUREG_XA_OFFS_H,			/* 0x06,   6 */
-	MPUREG_XA_OFFS_L,			/* 0x07,   7 */
+	MPUREG_XA_OFFS_L_TC,			/* 0x07,   7 */
 	MPUREG_YA_OFFS_H,			/* 0x08,   8 */
-	MPUREG_YA_OFFS_L,			/* 0x09,   9 */
+	MPUREG_YA_OFFS_L_TC,			/* 0x09,   9 */
 	MPUREG_ZA_OFFS_H,			/* 0x0a,  10 */
-	MPUREG_ZA_OFFS_L,			/* 0x0B,  11 */
-	MPUREG_PRODUCT_ID,				/* 0x0c,  12 */
+	MPUREG_ZA_OFFS_L_TC,			/* 0x0B,  11 */
+	MPUREG_0C_RSVD,				/* 0x0c,  12 */
 	MPUREG_0D_RSVD,				/* 0x0d,  13 */
 	MPUREG_0E_RSVD,				/* 0x0e,  14 */
 	MPUREG_0F_RSVD,				/* 0x0f,  15 */
@@ -81,7 +81,7 @@ enum {
 	MPUREG_I2C_SLV0_REG,			/* 0x26,  38 */
 	MPUREG_I2C_SLV0_CTRL,			/* 0x27,  39 */
 	MPUREG_I2C_SLV1_ADDR,			/* 0x28,  40 */
-	MPUREG_I2C_SLV1_REG,			/* 0x29,  41 */
+	MPUREG_I2C_SLV1_REG_PASSWORD,		/* 0x29,  41 */
 	MPUREG_I2C_SLV1_CTRL,			/* 0x2a,  42 */
 	MPUREG_I2C_SLV2_ADDR,			/* 0x2B,  43 */
 	MPUREG_I2C_SLV2_REG,			/* 0x2c,  44 */
@@ -139,11 +139,11 @@ enum {
 	MPUREG_EXT_SLV_SENS_DATA_23,		/* 0x60,  96 */
 	MPUREG_ACCEL_INTEL_STATUS,		/* 0x61,  97 */
 	MPUREG_62_RSVD,				/* 0x62,  98 */
-	MPUREG_I2C_SLV0_DO,			/* 0x63,  99 */
-	MPUREG_I2C_SLV1_DO,			/* 0x64, 100 */
-	MPUREG_I2C_SLV2_DO,			/* 0x65, 101 */
-	MPUREG_I2C_SLV3_DO,			/* 0x66, 102 */
-	MPUREG_I2C_MST_DELAY_CTRL,		/* 0x67, 103 */
+	MPUREG_63_RSVD,				/* 0x63,  99 */
+	MPUREG_64_RSVD,				/* 0x64, 100 */
+	MPUREG_65_RSVD,				/* 0x65, 101 */
+	MPUREG_66_RSVD,				/* 0x66, 102 */
+	MPUREG_67_RSVD,				/* 0x67, 103 */
 	MPUREG_SIGNAL_PATH_RESET,		/* 0x68, 104 */
 	MPUREG_ACCEL_INTEL_CTRL,		/* 0x69, 105 */
 	MPUREG_USER_CTRL,			/* 0x6A, 106 */
@@ -162,7 +162,7 @@ enum {
 	NUM_OF_MPU_REGISTERS			/* = 0x76, 118 */
 };
 
-/*==== MPU6050B1 MEMORY ====*/
+/*==== MPU6050A2 MEMORY ====*/
 enum MPU_MEMORY_BANKS {
 	MEM_RAM_BANK_0 = 0,
 	MEM_RAM_BANK_1,
@@ -181,7 +181,7 @@ enum MPU_MEMORY_BANKS {
 };
 
 
-/*==== MPU6050B1 parameters ====*/
+/*==== MPU6050A2 parameters ====*/
 
 #define NUM_REGS		(NUM_OF_MPU_REGISTERS)
 #define START_SENS_REGS		(0x3B)
@@ -198,16 +198,16 @@ enum MPU_MEMORY_BANKS {
 #define NUM_EXT_SLAVES		(4)
 
 
-/*==== BITS FOR MPU6050B1 ====*/
-/*---- MPU6050B1 'XG_OFFS_TC' register (0, 1, 2) ----*/
-#define BIT_PU_SLEEP_MODE			0x80
+/*==== BITS FOR MPU6050A2 ====*/
+
+/*---- MPU6050A2 'XG_OFFS_TC' register (0, 1, 2) ----*/
+#define BIT_PWR_MODE				0x80
 #define BITS_XG_OFFS_TC				0x7E
 #define BIT_OTP_BNK_VLD				0x01
 
-#define BIT_I2C_MST_VDDIO			0x80
 #define BITS_YG_OFFS_TC				0x7E
 #define BITS_ZG_OFFS_TC				0x7E
-/*---- MPU6050B1 'FIFO_EN' register (23) ----*/
+/*---- MPU6050A2 'FIFO_EN' register (23) ----*/
 #define	BIT_TEMP_OUT				0x80
 #define	BIT_GYRO_XOUT				0x40
 #define	BIT_GYRO_YOUT				0x20
@@ -216,44 +216,39 @@ enum MPU_MEMORY_BANKS {
 #define	BIT_SLV_2				0x04
 #define	BIT_SLV_1				0x02
 #define	BIT_SLV_0				0x01
-/*---- MPU6050B1 'CONFIG' register (1A) ----*/
+/*---- MPU6050A2 'CONFIG' register (1A) ----*/
 /*NONE						0xC0 */
 #define	BITS_EXT_SYNC_SET			0x38
 #define	BITS_DLPF_CFG				0x07
-/*---- MPU6050B1 'GYRO_CONFIG' register (1B) ----*/
+/*---- MPU6050A2 'GYRO_CONFIG' register (1B) ----*/
 /* voluntarily modified label from BITS_FS_SEL to
  * BITS_GYRO_FS_SEL to avoid confusion with MPU
  */
 #define BITS_GYRO_FS_SEL			0x18
 /*NONE						0x07 */
-/*---- MPU6050B1 'ACCEL_CONFIG' register (1C) ----*/
+/*---- MPU6050A2 'ACCEL_CONFIG' register (1C) ----*/
 #define BITS_ACCEL_FS_SEL			0x18
 #define BITS_ACCEL_HPF				0x07
-/*---- MPU6050B1 'I2C_MST_CTRL' register (24) ----*/
-#define BIT_MULT_MST_EN				0x80
+/*---- MPU6050A2 'I2C_MST_CTRL' register (24) ----*/
+#define BIT_MULT_MST_DIS			0x80
 #define BIT_WAIT_FOR_ES				0x40
-#define BIT_SLV_3_FIFO_EN			0x20
-#define BIT_I2C_MST_PSR				0x10
+#define BIT_I2C_MST_VDDIO			0x20
+/*NONE						0x10 */
 #define BITS_I2C_MST_CLK			0x0F
-/*---- MPU6050B1 'I2C_SLV?_ADDR' register (27,2A,2D,30) ----*/
-#define BIT_I2C_READ				0x80
-#define BIT_I2C_WRITE				0x00
-#define BITS_I2C_ADDR				0x7F
-/*---- MPU6050B1 'I2C_SLV?_CTRL' register (27,2A,2D,30) ----*/
+/*---- MPU6050A2 'I2C_SLV?_CTRL' register (27,2A,2D,30) ----*/
 #define BIT_SLV_ENABLE				0x80
 #define BIT_SLV_BYTE_SW				0x40
-#define BIT_SLV_REG_DIS				0x20
+/*NONE						0x20 */
 #define BIT_SLV_GRP				0x10
 #define BITS_SLV_LENG				0x0F
-/*---- MPU6050B1 'I2C_SLV4_ADDR' register (31) ----*/
+/*---- MPU6050A2 'I2C_SLV4_ADDR' register (31) ----*/
 #define BIT_I2C_SLV4_RNW			0x80
-/*---- MPU6050B1 'I2C_SLV4_CTRL' register (34) ----*/
+/*---- MPU6050A2 'I2C_SLV4_CTRL' register (34) ----*/
 #define BIT_I2C_SLV4_EN				0x80
 #define BIT_SLV4_DONE_INT_EN			0x40
-#define BIT_SLV4_REG_DIS			0x20
-#define MASK_I2C_MST_DLY			0x1F
-/*---- MPU6050B1 'I2C_MST_STATUS' register (36) ----*/
-#define BIT_PASS_THROUGH			0x80
+/*NONE						0x3F */
+/*---- MPU6050A2 'I2C_MST_STATUS' register (36) ----*/
+#define BIT_PASSTHROUGH				0x80
 #define BIT_I2C_SLV4_DONE			0x40
 #define BIT_I2C_LOST_ARB			0x20
 #define BIT_I2C_SLV4_NACK			0x10
@@ -261,7 +256,7 @@ enum MPU_MEMORY_BANKS {
 #define BIT_I2C_SLV2_NACK			0x04
 #define BIT_I2C_SLV1_NACK			0x02
 #define BIT_I2C_SLV0_NACK			0x01
-/*---- MPU6050B1 'INT_PIN_CFG' register (37) ----*/
+/*---- MPU6050A2 'INT_PIN_CFG' register (37) ----*/
 #define	BIT_ACTL				0x80
 #define BIT_ACTL_LOW				0x80
 #define BIT_ACTL_HIGH				0x00
@@ -272,7 +267,7 @@ enum MPU_MEMORY_BANKS {
 #define	BIT_FSYNC_INT_EN			0x04
 #define	BIT_BYPASS_EN				0x02
 #define	BIT_CLKOUT_EN				0x01
-/*---- MPU6050B1 'INT_ENABLE' register (38) ----*/
+/*---- MPU6050A2 'INT_ENABLE' register (38) ----*/
 #define	BIT_FF_EN				0x80
 #define	BIT_MOT_EN				0x40
 #define	BIT_ZMOT_EN				0x20
@@ -281,7 +276,7 @@ enum MPU_MEMORY_BANKS {
 #define	BIT_PLL_RDY_EN				0x04
 #define BIT_DMP_INT_EN				0x02
 #define	BIT_RAW_RDY_EN				0x01
-/*---- MPU6050B1 'DMP_INT_STATUS' register (39) ----*/
+/*---- MPU6050A2 'DMP_INT_STATUS' register (39) ----*/
 /*NONE						0x80 */
 /*NONE						0x40 */
 #define	BIT_DMP_INT_5				0x20
@@ -290,7 +285,7 @@ enum MPU_MEMORY_BANKS {
 #define	BIT_DMP_INT_2				0x04
 #define	BIT_DMP_INT_1				0x02
 #define	BIT_DMP_INT_0				0x01
-/*---- MPU6050B1 'INT_STATUS' register (3A) ----*/
+/*---- MPU6050A2 'INT_STATUS' register (3A) ----*/
 #define	BIT_FF_INT				0x80
 #define	BIT_MOT_INT				0x40
 #define	BIT_ZMOT_INT				0x20
@@ -299,18 +294,11 @@ enum MPU_MEMORY_BANKS {
 #define	BIT_PLL_RDY_INT				0x04
 #define BIT_DMP_INT				0x02
 #define	BIT_RAW_DATA_RDY_INT			0x01
-/*---- MPU6050B1 'MPUREG_I2C_MST_DELAY_CTRL' register (0x67) ----*/
-#define	BIT_DELAY_ES_SHADOW			0x80
-#define	BIT_SLV4_DLY_EN				0x10
-#define	BIT_SLV3_DLY_EN				0x08
-#define	BIT_SLV2_DLY_EN				0x04
-#define	BIT_SLV1_DLY_EN				0x02
-#define	BIT_SLV0_DLY_EN				0x01
-/*---- MPU6050B1 'BANK_SEL' register (6D) ----*/
+/*---- MPU6050A2 'BANK_SEL' register (6D) ----*/
 #define	BIT_PRFTCH_EN				0x40
 #define	BIT_CFG_USER_BANK			0x20
 #define	BITS_MEM_SEL				0x1f
-/*---- MPU6050B1 'USER_CTRL' register (6A) ----*/
+/*---- MPU6050A2 'USER_CTRL' register (6A) ----*/
 #define	BIT_DMP_EN				0x80
 #define	BIT_FIFO_EN				0x40
 #define	BIT_I2C_MST_EN				0x20
@@ -319,13 +307,12 @@ enum MPU_MEMORY_BANKS {
 #define	BIT_FIFO_RST				0x04
 #define	BIT_I2C_MST_RST				0x02
 #define	BIT_SIG_COND_RST			0x01
-/*---- MPU6050B1 'PWR_MGMT_1' register (6B) ----*/
+/*---- MPU6050A2 'PWR_MGMT_1' register (6B) ----*/
 #define	BIT_H_RESET				0x80
-#define	BIT_SLEEP				0x40
-#define	BIT_CYCLE				0x20
-#define BIT_PD_PTAT				0x08
+#define BITS_PWRSEL				0x70
+#define BIT_WKUP_INT				0x08
 #define BITS_CLKSEL				0x07
-/*---- MPU6050B1 'PWR_MGMT_2' register (6C) ----*/
+/*---- MPU6050A2 'PWR_MGMT_2' register (6C) ----*/
 #define BITS_LPA_WAKE_CTRL			0xC0
 #define	BIT_STBY_XA				0x20
 #define	BIT_STBY_YA				0x10
@@ -346,12 +333,15 @@ enum MPU_MEMORY_BANKS {
 /*-- registers --*/
 #define MPUREG_DLPF_FS_SYNC	MPUREG_CONFIG			/* 0x1A */
 
+#define MPUREG_PRODUCT_ID	MPUREG_WHOAMI			/* 0x75  HACK!*/
 #define MPUREG_PWR_MGM		MPUREG_PWR_MGMT_1		/* 0x6B */
 #define MPUREG_FIFO_EN1		MPUREG_FIFO_EN			/* 0x23 */
 #define MPUREG_INT_CFG		MPUREG_INT_ENABLE		/* 0x38 */
 #define MPUREG_X_OFFS_USRH	MPUREG_XG_OFFS_USRH		/* 0x13 */
 #define MPUREG_WHO_AM_I		MPUREG_WHOAMI			/* 0x75 */
 #define MPUREG_23_RSVD		MPUREG_EXT_SLV_SENS_DATA_00	/* 0x49 */
+#define MPUREG_AUX_SLV_ADDR	MPUREG_I2C_SLV0_ADDR		/* 0x25 */
+#define MPUREG_ACCEL_BURST_ADDR	MPUREG_I2C_SLV0_REG		/* 0x26 */
 
 /*-- bits --*/
 /* 'USER_CTRL' register */
@@ -365,13 +355,11 @@ enum MPU_MEMORY_BANKS {
 /* 'INT_STATUS' register */
 #define BIT_INT_STATUS_FIFO_OVERLOW BIT_FIFO_OVERFLOW_INT
 
-/*---- MPU6050 Silicon Revisions ----*/
-#define MPU_SILICON_REV_A2		1	/* MPU6050A2 Device */
-#define MPU_SILICON_REV_B1		2	/* MPU6050B1 Device */
 
-/*---- MPU6050 notable product revisions ----*/
-#define MPU_PRODUCT_KEY_B1_E1_5		105
-#define MPU_PRODUCT_KEY_B2_F1		431
+
+/*---- MPU6050A2 Silicon Revisions ----*/
+#define MPU_SILICON_REV_A2		1	/* MPU6050A2 Device */
+#define MPU_SILICON_REV_B1		2	/* MPU6050A2 Device */
 
 /*---- structure containing control variables used by MLDL ----*/
 /*---- MPU clock source settings ----*/
@@ -424,9 +412,9 @@ enum mpu_ext_sync {
 	((ext_sync << 3) | lpf)
 
 #define MPUREG_GYRO_CONFIG_VALUE(x_st, y_st, z_st, full_scale)	\
-	((x_st ? 0x80 : 0) |				\
-	 (y_st ? 0x70 : 0) |				\
-	 (z_st ? 0x60 : 0) |				\
+	((x_st ? 0x80 : 0) |					\
+	 (y_st ? 0x70 : 0) |					\
+	 (z_st ? 0x60 : 0) |					\
 	 (full_scale << 3))
 
 #endif				/* __MPU6050_H_ */
