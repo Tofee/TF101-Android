@@ -78,11 +78,12 @@ struct tegra_dc {
 	void __iomem			*base;
 	int				irq;
 
+	int				pixel_clk;
 	struct clk			*clk;
 	struct clk			*emc_clk;
 	int				emc_clk_rate;
 	int				new_emc_clk_rate;
-	u32				shift_clk_div;
+	u32				shift_clk_div;	
 
 	bool				connected;
 	bool				enabled;
@@ -101,6 +102,7 @@ struct tegra_dc {
 	wait_queue_head_t		wq;
 
 	struct mutex			lock;
+	struct mutex			one_shot_lock;	
 
 	struct resource			*fb_mem;
 	struct tegra_fb_info		*fb;
@@ -145,25 +147,25 @@ struct tegra_dc {
 
 static inline void tegra_dc_io_start(struct tegra_dc *dc)
 {
-	nvhost_module_busy(nvhost_get_host(dc->ndev)->dev);
+	nvhost_module_busy(&dc->ndev->host->mod);
 }
 
 static inline void tegra_dc_io_end(struct tegra_dc *dc)
 {
-	nvhost_module_idle(nvhost_get_host(dc->ndev)->dev);
+	nvhost_module_idle(&dc->ndev->host->mod);
 }
 
 static inline unsigned long tegra_dc_readl(struct tegra_dc *dc,
 					   unsigned long reg)
 {
-	BUG_ON(!nvhost_module_powered(nvhost_get_host(dc->ndev)->dev));
+	BUG_ON(!nvhost_module_powered(&dc->ndev->host->mod));
 	return readl(dc->base + reg * 4);
 }
 
 static inline void tegra_dc_writel(struct tegra_dc *dc, unsigned long val,
 				   unsigned long reg)
 {
-	BUG_ON(!nvhost_module_powered(nvhost_get_host(dc->ndev)->dev));
+	BUG_ON(!nvhost_module_powered(&dc->ndev->host->mod));
 	writel(val, dc->base + reg * 4);
 }
 

@@ -29,6 +29,15 @@
 #define TEGRA_MAX_DC		2
 #define DC_N_WINDOWS		3
 
+extern bool b_dc0_enabled;
+extern int hdmi_resolution;
+
+enum {
+	HDMI_ACTIVE_1920_1080,
+	HDMI_ACTIVE_1280_720,
+	HDMI_ACTIVE_NONE,
+};
+
 
 /* DSI pixel data format */
 enum {
@@ -189,6 +198,7 @@ struct tegra_stereo_out {
 
 struct tegra_dc_mode {
 	int	pclk;
+//	int	rated_pclk;
 	int	h_ref_to_sync;
 	int	v_ref_to_sync;
 	int	h_sync_width;

@@ -22,10 +22,9 @@
 #ifndef _NVHOST_T30_H_
 #define _NVHOST_T30_H_
 
-struct nvhost_master;
+#include "../t20/t20.h"
 
 int nvhost_init_t30_channel_support(struct nvhost_master *);
 int nvhost_init_t30_debug_support(struct nvhost_master *);
-int nvhost_init_t30_support(struct nvhost_master *host);
 
 #endif /* _NVHOST_T30_H_ */

@@ -134,7 +134,11 @@ static int tegra_fb_set_par(struct fb_info *info)
 		 * client requests it
 		 */
 		stereo = !!(var->vmode & info->mode->vmode &
+#ifndef CONFIG_TEGRA_HDMI_74MHZ_LIMIT
 					FB_VMODE_STEREO_FRAME_PACK);
+#else
+					FB_VMODE_STEREO_LEFT_RIGHT);
+#endif
 
 		tegra_dc_set_fb_mode(tegra_fb->win->dc, info->mode, stereo);
 
@@ -225,6 +229,7 @@ static int tegra_fb_setcmap(struct fb_cmap *cmap, struct fb_info *info)
 	return 0;
 }
 
+#if defined(CONFIG_FRAMEBUFFER_CONSOLE)
 static void tegra_fb_flip_win(struct tegra_fb_info *tegra_fb)
 {
 	struct tegra_dc_win *win = tegra_fb->win;
@@ -267,6 +272,10 @@ static void tegra_fb_flip_win(struct tegra_fb_info *tegra_fb)
 	tegra_dc_update_windows(&tegra_fb->win, 1);
 	tegra_dc_sync_windows(&tegra_fb->win, 1);
 }
+#endif
+int display_on=1;
+//extern int asusec_resume(int);
+//extern int hub_suspended;
 
 static int tegra_fb_blank(int blank, struct fb_info *info)
 {
@@ -277,6 +286,12 @@ static int tegra_fb_blank(int blank, struct fb_info *info)
 		dev_dbg(&tegra_fb->ndev->dev, "unblank\n");
 		tegra_fb->win->flags = TEGRA_WIN_FLAG_ENABLED;
 		tegra_dc_enable(tegra_fb->win->dc);
+		display_on=1;
+/*		if (hub_suspended) {
+			printk("Restore dock on display on\n");
+			asusec_resume(1);
+		}
+*/	
 #if defined(CONFIG_FRAMEBUFFER_CONSOLE)
 		/*
 		* TODO:
@@ -299,6 +314,7 @@ static int tegra_fb_blank(int blank, struct fb_info *info)
 	case FB_BLANK_POWERDOWN:
 		dev_dbg(&tegra_fb->ndev->dev, "blank - powerdown\n");
 		tegra_dc_disable(tegra_fb->win->dc);
+		display_on=0;
 		return 0;
 
 	default:
@@ -585,7 +601,10 @@ struct tegra_fb_info *tegra_fb_register(struct nvhost_device *ndev,
 	if (dc->mode.pclk > 1000) {
 		struct tegra_dc_mode *mode = &dc->mode;
 
-		info->var.pixclock = KHZ2PICOS(mode->pclk / 1000);
+/*		if (dc->out->flags & TEGRA_DC_OUT_ONE_SHOT_MODE)
+			info->var.pixclock = KHZ2PICOS(mode->rated_pclk / 1000);
+		else
+*/			info->var.pixclock = KHZ2PICOS(mode->pclk / 1000);
 		info->var.left_margin = mode->h_back_porch;
 		info->var.right_margin = mode->h_front_porch;
 		info->var.upper_margin = mode->v_back_porch;

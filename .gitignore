@@ -82,5 +82,11 @@ GSYMS
 GTAGS
 
 *.orig
+*.org
+*.nue
 *~
 \#*#
+
+compilar
+compilar-arranque312-1200
+compilar-arranque312-1200-aokp
