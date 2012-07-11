@@ -14,7 +14,3 @@ What did I change there ?
   This makes the boot partition to not backing up by default.
 
 - In the 'backup' page, delete the whole corresponding 'boot' checkbox. We don't need it. More user friendly this way.
-
-- In the 'install' page, in file selector xml derivate, change the default location for zip installs from /sdcard to /data/media, like this
-
-<path name="tw_zip_location" default="/data/media" />
