@@ -130,6 +130,15 @@ obj-${CONFIG_MACH_VENTANA}              += board-ventana-panel.o
 obj-${CONFIG_MACH_VENTANA}              += board-ventana-sensors.o
 obj-${CONFIG_MACH_VENTANA}              += board-ventana-memory.o
 
+obj-${CONFIG_MACH_PICASSO}                += board-picasso.o
+obj-${CONFIG_MACH_PICASSO}                += board-picasso-pinmux.o
+obj-${CONFIG_MACH_PICASSO}                += board-picasso-sdhci.o
+obj-${CONFIG_MACH_PICASSO}                += board-picasso-power.o
+obj-${CONFIG_MACH_PICASSO}                += board-picasso-panel.o
+obj-${CONFIG_MACH_PICASSO}                += board-picasso-sensors.o
+obj-${CONFIG_MACH_PICASSO}                += board-picasso-memory.o
+obj-${CONFIG_MACH_PICASSO}                += board-picasso-sysfs.o
+
 obj-${CONFIG_MACH_TF101}                += board-tf101.o
 obj-${CONFIG_MACH_TF101}                += board-tf101-pinmux.o
 obj-${CONFIG_MACH_TF101}                += board-tf101-sdhci.o
