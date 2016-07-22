@@ -24,8 +24,6 @@
 #include <mach/gpiomux.h>
 #include "board-tenderloin.h"
 
-static struct rfkill *bt_rfk;
-static const char bt_name[] = "csrbc6";
 static int power_state = 0;
 
 /* helper function to manipulate group of gpios (msm_gpiomux)*/
@@ -73,37 +71,17 @@ static int bluetooth_set_power(void *data, bool blocked)
 	return 0;
 }
 
-static struct rfkill_ops tenderloin_rfkill_ops = {
-	.set_block = bluetooth_set_power,
-};
-
 static int tenderloin_rfkill_probe(struct platform_device *pdev)
 {
 	int rc = 0;
-	bool default_state = true;  /* off */
 
-	bluetooth_set_power(NULL, default_state);
+	bluetooth_set_power(NULL, false);
 
-	bt_rfk = rfkill_alloc(bt_name, &pdev->dev, RFKILL_TYPE_BLUETOOTH,
-			      &tenderloin_rfkill_ops, NULL);
-	if (!bt_rfk)
-		return -ENOMEM;
-
-	/* userspace cannot take exclusive control */
-
-	rfkill_set_states(bt_rfk, default_state, false);
-
-	rc = rfkill_register(bt_rfk);
-
-	if (rc)
-		rfkill_destroy(bt_rfk);
 	return rc;
 }
 
 static int tenderloin_rfkill_remove(struct platform_device *dev)
 {
-	rfkill_unregister(bt_rfk);
-	rfkill_destroy(bt_rfk);
 
 	return 0;
 }

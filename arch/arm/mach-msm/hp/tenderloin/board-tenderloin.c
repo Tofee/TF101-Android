@@ -12,6 +12,8 @@
  */
 
 #define HASTIMPANI 0
+#define CONFIG_BT 1
+
 #include <linux/kernel.h>
 #include <linux/platform_device.h>
 #include <linux/gpio.h>
